@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Montserrat:wght@100;200;300;400;500;600&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+@layer utilities {
+	body {
+		font-family: "Poppins", sans-serif;
+		height: auto;
+	}
+	.content-auto {
+		content-visibility: auto;
+	}
+	.shadow-login {
+		box-shadow: 0 15px 17px 0.17px rgb(0 0 0 / 5%);
+	}
+	.social-network-animation {
+		transform: scale(1.3) translateZ(0);
+	}
+	.hoverAnimation {
+		@apply hover:bg-[#d9d9d9] hover:bg-opacity-10 rounded-full 
+		cursor-pointer w-[52px] h-[52px] xl:w-auto xl:h-auto xl:py-3 xl:px-4
+		transition duration-200 ease-out;
+	}
+	.flex-center {
+		@apply flex justify-center items-center;
+	}
+	.border-color {
+		@apply border-[#2F3336];
+	}
+	.bg-transparent {
+		background-color: rgba(0, 0, 0, 0.65);
+	}
+	.width-page {
+		@apply fixed top-0 left-[70px] right-0 md:w-[calc(100%_-_370px)] xl:w-[calc(100%_-_802px)] xl:left-[402px] text-white h-screen z-20;
+	}
+	.input-message {
+		@apply fixed bottom-0 left-[70px] right-0 md:w-[calc(100%_-_370px)] xl:w-[calc(100%_-_802px)] xl:left-[402px] text-white z-50;
+	}
+	.display-message {
+		@apply fixed bottom-[71px] left-[70px] top-[79px] right-0 md:w-[calc(100%_-_370px)] xl:w-[calc(100%_-_802px)] xl:left-[402px] text-white z-20;
+	}
+	.bg-twiiter {
+		@apply bg-[#1D9BF0];
+	}
+	.md-tweet-post {
+		@apply absolute top-20 left-1/2 -translate-x-1/2;
+	}
+	.bg-transparent-config {
+		background-color: rgba(91, 112, 131, 0.4);
+	}
+	.hoverAnimation2 {
+		@apply rounded-full bg-[#d9d9d9] bg-opacity-10;
+	}
+	.position-center {
+		@apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+	}
+	.md-modal-new-message {
+		@apply w-[600px] h-[650px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl;
+	}
+}
