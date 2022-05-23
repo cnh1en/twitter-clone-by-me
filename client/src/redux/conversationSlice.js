@@ -10,8 +10,14 @@ const conversationSlice = createSlice({
 		getMessages: (state, action) => {
 			state.messages = action.payload;
 		},
+		deleteMessage: (state, action) => {
+			state.messages = state.messages.filter(
+				(item) => item._id !== action.payload
+			);
+		},
 	},
 });
 
 export default conversationSlice.reducer;
-export const { createMessage, getMessages } = conversationSlice.actions;
+export const { createMessage, getMessages, deleteMessage } =
+	conversationSlice.actions;

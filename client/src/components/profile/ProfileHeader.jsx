@@ -1,8 +1,11 @@
+import { MailIcon } from "@heroicons/react/outline";
 import moment from "moment";
 import React from "react";
 import { useSelector } from "react-redux";
 import Avatar from "../Avatar";
 import EditProfile from "./EditProfile";
+import ReactTooltip from "react-tooltip";
+import { useNavigate } from "react-router";
 
 const ProfileHeader = ({
 	editProfile,
@@ -18,9 +21,10 @@ const ProfileHeader = ({
 	setChangeTab,
 }) => {
 	const { auth, profile } = useSelector((state) => state);
+	const navigate = useNavigate();
 
 	return (
-		<div className="profile-heade">
+		<div className="profile-head">
 			<div className="">
 				<div className="img-background relative">
 					<img
@@ -35,28 +39,48 @@ const ProfileHeader = ({
 						positon="absolute -bottom-[72.5px] left-4"
 					/>
 				</div>
-				{auth.user._id === id ? (
-					<button
-						className="edit-profile px-3 py-1 font-[500] rounded-full border-[1px] border-color block ml-auto mr-4 mt-4 bg-black hover:bg-[#eff3f41a]"
-						onClick={() => setEditProfile(!editProfile)}
-					>
-						Edit profile
-					</button>
-				) : follow ? (
-					<button
-						className="unfollow px-3 py-1 font-[500] rounded-full border-[1px] border-color block ml-auto mr-4 mt-4 text-black bg-[#EFF3F4] hover:bg-[#D7DBDC]"
-						onClick={handleUnfollow}
-					>
-						Unfollow
-					</button>
-				) : (
-					<button
-						className="follow px-3 py-1 font-[500] rounded-full border-[1px] border-color block ml-auto mr-4 mt-4 text-black bg-[#EFF3F4] hover:bg-[#D7DBDC]"
-						onClick={handleFollow}
-					>
-						Follow
-					</button>
-				)}
+				<div className="flex justify-end mr-4 mt-4 items-center gap-3">
+					{auth.user._id !== id && (
+						<div
+							className="w-[34px] h-[34px] flex-center rounded-full border-[1px] border-color cursor-pointer hover:bg-[#eff3f4]/10"
+							data-tip
+							data-for="messagesTip"
+							onClick={() => navigate(`/messages/${id}`)}
+						>
+							<MailIcon className="h-5" />
+							<ReactTooltip
+								id="messagesTip"
+								place="bottom"
+								effect="solid"
+								delayShow={500}
+							>
+								Messages
+							</ReactTooltip>
+						</div>
+					)}
+					{auth.user._id === id ? (
+						<button
+							className="edit-profile px-3 py-1 font-[500] rounded-full border-[1px] border-color block   bg-black hover:bg-[#eff3f41a]"
+							onClick={() => setEditProfile(!editProfile)}
+						>
+							Edit profile
+						</button>
+					) : follow ? (
+						<button
+							className="unfollow px-3 py-1 font-[500] rounded-full border-[1px] border-color block   text-black bg-[#EFF3F4] hover:bg-[#D7DBDC]"
+							onClick={handleUnfollow}
+						>
+							Unfollow
+						</button>
+					) : (
+						<button
+							className="follow px-3 py-1 font-[500] rounded-full border-[1px] border-color block   text-black bg-[#EFF3F4] hover:bg-[#D7DBDC]"
+							onClick={handleFollow}
+						>
+							Follow
+						</button>
+					)}
+				</div>
 
 				<div className="profile mt-[42px] mx-5">
 					<h2 className="font-bold">{profile?.info.fullname}</h2>

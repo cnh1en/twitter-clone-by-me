@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/outline";
 import { Picker } from "emoji-mart";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +10,11 @@ import LoadingLine from "../../components/LoadingLine";
 import ComposeMessage from "../../components/messages/ComposeMessage";
 import InformationFriendChat from "../../components/messages/InformationFriendChat";
 import Message from "../../components/messages/Message";
+import RemoveConversationModal from "../../components/modal/RemoveConversationModal";
+import RemoveMessageModal from "../../components/modal/RemoveMessageModal";
 import { createMessage, getMessages } from "../../redux/conversationSlice";
 import { openModal } from "../../redux/modalSlice";
-import { getDataAPI, postDataAPI } from "../../utils/fetchData";
+import { deleteDataAPI, getDataAPI, postDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
 
 const Conversation = () => {
@@ -23,13 +26,17 @@ const Conversation = () => {
 	const [image, setImage] = useState("");
 	const [messages, setMessages] = useState([]);
 	const [showModal, setShowModal] = useState(false);
+	const [showRemoveConversationModal, setShowRemoveConversationModal] =
+		useState(false);
+	const [flag, setFlag] = useState(false);
 
-	const { auth, conversation, socket } = useSelector((state) => state);
+	const { auth, conversation, socket, modal } = useSelector((state) => state);
 	const { id } = useParams();
 
 	const emojisPickerRef = useRef(null);
 	const smileRef = useRef(null);
 	const inputImageRef = useRef(null);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -71,6 +78,16 @@ const Conversation = () => {
 		sym.forEach((el) => codesArray.push("0x" + el));
 		let emoji = String.fromCodePoint(...codesArray);
 		setText(text + emoji);
+	};
+
+	const handleRemoveConversation = async () => {
+		try {
+			await deleteDataAPI(`/conversation/${id}/destroy`, auth.token);
+			setShowRemoveConversationModal(false);
+			navigate("/messages");
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	useEffect(() => {
 		if (id) {
@@ -129,31 +146,43 @@ const Conversation = () => {
 						</span>
 					</div>
 
-					<span
-						className="w-8 h-8 flex-center hover:hoverAnimation2"
-						onClick={() => setShowCompose(true)}
-					>
-						<i className="ri-mail-add-line font-[400] text-xl cursor-pointer"></i>
-					</span>
+					<div className="flex gap-2">
+						<span
+							className="w-8 h-8 flex-center hover:hoverAnimation2 cursor-pointer"
+							onClick={() => setShowRemoveConversationModal(true)}
+						>
+							<TrashIcon className="h-5" />
+						</span>
+						<span
+							className="w-8 h-8 flex-center hover:hoverAnimation2 cursor-pointer"
+							onClick={() => setShowCompose(true)}
+						>
+							<i className="ri-mail-add-line font-[400] text-xl"></i>
+						</span>
+					</div>
 				</div>
 			</div>
 
 			{/* MESSAGES */}
-			<div className="messages-list display-message overflow-auto scrollbar z-20">
+			<div
+				className={`display-message overflow-auto scrollbar  ${
+					flag ? "z-50" : "z-30"
+				}`}
+			>
 				<InformationFriendChat user={user} />
 				{conversation.messages?.map((item, index) => (
 					<div key={index} className="px-4">
 						{item.sender._id !== auth.user._id ? (
-							<Message message={item} left={true} />
+							<Message message={item} left={true} setFlag={setFlag} />
 						) : (
-							<Message message={item} left={false} />
+							<Message message={item} left={false} setFlag={setFlag} />
 						)}
 					</div>
 				))}
 			</div>
 
 			{/* INPUT */}
-			<div className="input-message py-2 flex-center space-x-2 px-3 border-t-[1px] border-color bg-black z-50">
+			<div className="input-message py-2 flex-center space-x-2 px-3 border-t-[1px] border-color bg-black z-30">
 				{loadingImage && (
 					<div className="absolute top-0 left-0 w-full	">
 						<LoadingLine />
@@ -192,7 +221,7 @@ const Conversation = () => {
 									maxWidth: "320px",
 									borderRadius: "20px",
 									pointerEvents: "auto",
-									zIndex: "20",
+									zIndex: "50",
 								}}
 								theme="dark"
 							/>
@@ -234,6 +263,12 @@ const Conversation = () => {
 				</div>
 			</div>
 			{showCompose && <ComposeMessage setShowCompose={setShowCompose} />}
+			{showRemoveConversationModal && (
+				<RemoveConversationModal
+					handleRemoveConversation={handleRemoveConversation}
+					setShowRemoveConversationModal={setShowRemoveConversationModal}
+				/>
+			)}
 		</div>
 	) : (
 		<Loading />

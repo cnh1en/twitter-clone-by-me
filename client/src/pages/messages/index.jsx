@@ -23,7 +23,7 @@ const Message = () => {
 				setLoading(false);
 			})
 			.catch((error) => console.log(error));
-	}, []);
+	}, [auth.token]);
 	return (
 		<div className="width-page ">
 			<div className="py-4 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20">

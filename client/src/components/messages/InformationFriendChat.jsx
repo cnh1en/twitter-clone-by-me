@@ -1,5 +1,6 @@
 import moment from "moment";
 import React from "react";
+import { Link } from "react-router-dom";
 import Avatar from "../Avatar";
 
 const InformationFriendChat = ({ user }) => {
@@ -8,7 +9,12 @@ const InformationFriendChat = ({ user }) => {
 			<Avatar src={user.avatar} width="w-40" height="h-40" />
 			<div className="name text-center">
 				<div className="text-[14px] text-center mb-2">
-					<span className="font-bold">{user.fullname}</span>{" "}
+					<Link
+						className="font-bold hover:underline cursor-pointer"
+						to={`/profile/${user._id}`}
+					>
+						{user.fullname}
+					</Link>{" "}
 					<span className="text-[#71767b]">@{user.username}</span>
 				</div>
 				<div className="space-x-3">
