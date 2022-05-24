@@ -106,7 +106,9 @@ const Message = () => {
 										</div>
 
 										<span className="text-[13px] text-[#71767b]">
-											{item.text.slice(0, 60) + "..."}
+											{item.text.length > 60
+												? item.text.slice(0, 60) + "..."
+												: item.text}
 										</span>
 									</div>
 								</Link>
