@@ -31,7 +31,7 @@ const userCtrl = {
 					background,
 				},
 				{ new: true }
-			);
+			).populate("followers following", "-password");
 
 			return res.status(200).json({ user: updatedUser });
 		} catch (error) {

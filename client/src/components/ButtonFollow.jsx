@@ -13,7 +13,6 @@ const ButtonFollow = ({ user }) => {
 
 	const handleFollow = async () => {
 		try {
-			// dispatch(myFollow(user)); // FOLLOW IN FOLLOW PAGE -> following of auth.user  += 1
 			dispatch(
 				updateAuthUser({ following: [...auth.user.following, user] })
 			);

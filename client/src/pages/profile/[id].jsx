@@ -113,7 +113,7 @@ const Profile = () => {
 				})
 				.catch((error) => console.log(error));
 		}
-	}, [id, auth.token, dispatch]);
+	}, [id, auth.token, dispatch, callback]);
 
 	useEffect(() => {
 		if (id === auth.user._id) {
