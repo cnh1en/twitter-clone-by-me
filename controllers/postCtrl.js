@@ -257,6 +257,54 @@ const postCtrl = {
 			return res.status(500).json({ msg: error.message });
 		}
 	},
+
+	getBookmarks: async (req, res) => {
+		try {
+			const bookmarks = await Posts.find({
+				bookmarks: req.user._id,
+			})
+				.sort("-createdAt")
+				.populate("user", "-password");
+
+			return res.status(200).json({ bookmarks });
+		} catch (error) {
+			return res.status(500).json({ msg: error.message });
+		}
+	},
+	pushInBookmark: async (req, res) => {
+		try {
+			const post = await Posts.findByIdAndUpdate(
+				req.params.id,
+				{
+					$push: {
+						bookmarks: req.user._id,
+					},
+				},
+				{ new: true }
+			);
+
+			return res.status(200).json({ post });
+		} catch (error) {
+			return res.status(500).json({ msg: error.message });
+		}
+	},
+	deleteInBookmarks: async (req, res) => {
+		try {
+			const post = await Posts.findByIdAndUpdate(
+				req.params.id,
+				{
+					$pull: {
+						bookmarks: req.user._id,
+					},
+				},
+				{ new: true }
+			);
+
+			return res.status(200).json({ post });
+		} catch (error) {
+			return res.status(500).json({ msg: error.message });
+		}
+	},
 };
 
 export default postCtrl;

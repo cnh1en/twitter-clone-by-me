@@ -11,6 +11,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
+import { updatePostInBookmarks } from "../../redux/bookmarkSlice";
 import { openModal } from "../../redux/modalSlice";
 import {
 	likeComment,
@@ -53,6 +54,7 @@ const Post = ({ post }) => {
 	const modalRef = useRef(null);
 	const infoTip = useRef(null);
 	const dispatch = useDispatch();
+
 	const handleLike = async () => {
 		try {
 			setLike(true);
@@ -68,14 +70,13 @@ const Post = ({ post }) => {
 				);
 			}
 			if (page === "post" && id === post._id) {
-				dispatch(likeSelectedPost(auth.user._id)); // like root post
-				// socket.socketClient.emit("likePostInSelectedPost", {
-				// 	post,
-				// 	like: auth.user,
-				// });
+				dispatch(likeSelectedPost(auth.user._id));
 			} else if (page === "post" && id !== post._id) {
 				// like comment
 				dispatch(likeComment({ id: post._id, like: auth.user._id }));
+			} else if (page === "bookmarks") {
+				const newPost = { ...post, likes: [...post.likes, auth.user._id] };
+				dispatch(updatePostInBookmarks(newPost));
 			}
 
 			dispatch(likePost({ id: post._id, like: auth.user._id, socket }));
@@ -117,6 +118,12 @@ const Post = ({ post }) => {
 				dispatch(unlikeSelectedPost(auth.user._id));
 			} else if (page === "post" && id !== post._id) {
 				dispatch(unlikeComment({ id: post._id, like: auth.user._id }));
+			} else if (page === "bookmarks") {
+				const newPost = {
+					...post,
+					likes: post.likes.filter((item) => item !== auth.user._id),
+				};
+				dispatch(updatePostInBookmarks(newPost));
 			}
 
 			dispatch(unlikePost({ id: post._id, like: auth.user._id }));
@@ -143,6 +150,12 @@ const Post = ({ post }) => {
 				dispatch(shareSelectedPost(auth.user._id));
 			} else if (page === "post" && id !== post._id) {
 				dispatch(retweetComment({ id: post._id, retweet: auth.user._id }));
+			} else if (page === "bookmarks") {
+				const newPost = {
+					...post,
+					retweet: [...post.retweet, auth.user._id],
+				};
+				dispatch(updatePostInBookmarks(newPost));
 			}
 			dispatch(retweetPost({ id: post._id, retweet: auth.user._id }));
 			socket.socketClient.emit("retweetPost", {
@@ -190,6 +203,12 @@ const Post = ({ post }) => {
 				dispatch(
 					unretweetComment({ id: post._id, retweet: auth.user._id })
 				);
+			} else if (page === "bookmarks") {
+				const newPost = {
+					...post,
+					retweet: post.retweet.filter((item) => item !== auth.user._id),
+				};
+				dispatch(updatePostInBookmarks(newPost));
 			}
 			dispatch(unretweetPost({ id: post._id, retweet: auth.user._id }));
 			socket.socketClient.emit("unretweetPost", {

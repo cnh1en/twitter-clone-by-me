@@ -21,4 +21,9 @@ router.route("/:id/posts").get(auth, postCtrl.getMyPosts);
 router.route("/post/:id").get(auth, postCtrl.getPostSelected);
 router.route("/post/:id").patch(auth, postCtrl.updatePost);
 router.route("/comment/:id").patch(auth, postCtrl.deleteCommentOfPost);
+
+router.route("/bookmarks").get(auth, postCtrl.getBookmarks);
+router.route("/bookmark/:id/destroy").patch(auth, postCtrl.deleteInBookmarks);
+router.route("/bookmark/:id").patch(auth, postCtrl.pushInBookmark);
+
 export default router;

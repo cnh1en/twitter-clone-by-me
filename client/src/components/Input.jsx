@@ -14,6 +14,7 @@ import LoadingLine from "./LoadingLine";
 import TextareaAutosize from "react-textarea-autosize";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { createNotify } from "../redux/notifySlice";
+import { updatePostInBookmarks } from "../redux/bookmarkSlice";
 
 const Input = ({
 	back,
@@ -136,23 +137,31 @@ const Input = ({
 							comment: res.data.newPost._id,
 						})
 					);
+				} else if (page === "bookmarks") {
+					const newPost = {
+						...replyPost,
+						comments: [...replyPost.comments, res.data.newPost._id],
+					};
+					dispatch(updatePostInBookmarks(newPost));
 				}
 
-				const msg = {
-					id: res.data.newPost._id,
-					text: "comments in your post",
-					recipients: [replyPost.user._id],
-					url: `/post/${replyPost._id}`,
-					content,
-					image: replyPost.images.length ? replyPost.images[0].url : "",
-					user: auth.user,
-					isRead: false,
-					action: "comment",
-				};
-				const result = await postDataAPI("notify", msg, auth.token);
-				socket.socketClient.emit("createNotify", {
-					msg: { ...msg, _id: result.data.notify._id },
-				});
+				if (replyPost.user._id !== auth.user._id) {
+					const msg = {
+						id: res.data.newPost._id,
+						text: "comments in your post",
+						recipients: [replyPost.user._id],
+						url: `/post/${replyPost._id}`,
+						content,
+						image: replyPost.images.length ? replyPost.images[0].url : "",
+						user: auth.user,
+						isRead: false,
+						action: "comment",
+					};
+					const result = await postDataAPI("notify", msg, auth.token);
+					socket.socketClient.emit("createNotify", {
+						msg: { ...msg, _id: result.data.notify._id },
+					});
+				}
 				setStartAnimation && setStartAnimation(false);
 				setContent("");
 				setImages([]);

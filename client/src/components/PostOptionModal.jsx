@@ -7,9 +7,10 @@ import {
 	UserAddIcon,
 	UserRemoveIcon,
 } from "@heroicons/react/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
+import { deleteInBookmarks, pushInBookmarks } from "../redux/bookmarkSlice";
 import { openModal } from "../redux/modalSlice";
 import { deleteComment } from "../redux/postSelectedSlice";
 import { deletePost, updatePost, updatePostP2 } from "../redux/postSlice";
@@ -21,11 +22,14 @@ const PostOptionModal = ({ auth, post }) => {
 	const [openRemovePostModal, setRemovePostModal] = useState(false);
 	const {
 		postSelected,
+		bookmark,
 		post: { posts },
 	} = useSelector((state) => state);
+
 	const dispatch = useDispatch();
 	const { page, id } = useParams();
 	const navigate = useNavigate();
+	const [checkBookmark, setBookmark] = useState(false);
 
 	const handleRemovePost = async () => {
 		try {
@@ -83,6 +87,38 @@ const PostOptionModal = ({ auth, post }) => {
 		}
 	};
 
+	const handlePushInBookmarks = async () => {
+		try {
+			const newPost = { ...post, bookmarks: [...post.bookmarks, auth.user] };
+			dispatch(pushInBookmarks(newPost));
+			setBookmark(true);
+			dispatch(openModal(false));
+			await patchDataAPI(`/bookmark/${post._id}`, null, auth.token);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleDeleteInBookmarks = async () => {
+		try {
+			dispatch(deleteInBookmarks(post._id));
+			setBookmark(false);
+			dispatch(openModal(false));
+
+			await patchDataAPI(`/bookmark/${post._id}/destroy`, null, auth.token);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		if (
+			post.bookmarks.length &&
+			!post.bookmarks.every((item) => item !== auth.user._id)
+		) {
+			setBookmark(true);
+		} else setBookmark(false);
+	}, [auth.user._id, post.bookmarks]);
 	return (
 		<div>
 			<div className="space-y-2">
@@ -107,12 +143,25 @@ const PostOptionModal = ({ auth, post }) => {
 								</>
 							)}
 						</div>
-						<div className="follow flex gap-4 items-center py-2">
-							<DocumentAddIcon className="h-5 text-[#71767B]" />
-							<span className="font-[400] text-[15px]">
-								Block @{post.user.username}
-							</span>
-						</div>
+						{!checkBookmark ? (
+							<div
+								className="follow flex gap-4 items-center py-2"
+								onClick={handlePushInBookmarks}
+							>
+								<DocumentAddIcon className="h-5 text-[#71767B]" />
+								<span className="font-[400] text-[15px]">Bookmark</span>
+							</div>
+						) : (
+							<div
+								className="follow flex gap-4 items-center py-2"
+								onClick={handleDeleteInBookmarks}
+							>
+								<DocumentAddIcon className="h-5 text-[#71767B]" />
+								<span className="font-[400] text-[15px]">
+									Remove Tweet from Bookmarks
+								</span>
+							</div>
+						)}
 						<div className="follow flex gap-4 items-center py-2">
 							<BanIcon className="h-5 text-[#71767B]" />
 							<span className="font-[400] text-[15px]">
@@ -142,6 +191,26 @@ const PostOptionModal = ({ auth, post }) => {
 							<PencilIcon className="h-5 text-[#71767B]" />
 							<span className="font-[400] text-[15px]">Edit</span>
 						</div>
+
+						{!checkBookmark ? (
+							<div
+								className="follow flex gap-4 items-center py-2"
+								onClick={handlePushInBookmarks}
+							>
+								<DocumentAddIcon className="h-5 text-[#71767B]" />
+								<span className="font-[400] text-[15px]">Bookmark</span>
+							</div>
+						) : (
+							<div
+								className="follow flex gap-4 items-center py-2"
+								onClick={handleDeleteInBookmarks}
+							>
+								<DocumentAddIcon className="h-5 text-[#71767B]" />
+								<span className="font-[400] text-[15px]">
+									Remove Tweet from Bookmarks
+								</span>
+							</div>
+						)}
 					</>
 				)}
 			</div>

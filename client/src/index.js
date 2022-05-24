@@ -15,6 +15,7 @@ import callback from "./redux/callbackSlice";
 import socket from "./redux/socketSlice";
 import notify from "./redux/notifySlice";
 import conversation from "./redux/conversationSlice";
+import bookmark from "./redux/bookmarkSlice";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const store = configureStore({
@@ -29,6 +30,7 @@ const store = configureStore({
 		socket,
 		notify,
 		conversation,
+		bookmark,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({

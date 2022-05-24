@@ -15,6 +15,7 @@ const postSchema = new mongoose.Schema(
 		// 	type: Boolean,
 		// 	default: true,
 		// },
+		bookmarks: [{ type: mongoose.Types.ObjectId, ref: "user" }],
 		retweet: [{ type: mongoose.Types.ObjectId, ref: "user" }],
 		reply: [{ type: mongoose.Types.ObjectId, ref: "post" }],
 		likes: [{ type: mongoose.Types.ObjectId, ref: "user" }],

@@ -111,8 +111,8 @@ const Sidebar = () => {
 						iconActive={
 							<i className="text-white ri-bookmark-fill text-2xl"></i>
 						}
-						text="Bookmark"
-						to="/bookmark"
+						text="Bookmarks"
+						to="/bookmarks"
 					/>
 					<SidebarLink
 						icon={
