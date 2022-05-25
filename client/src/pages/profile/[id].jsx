@@ -65,9 +65,11 @@ const Profile = () => {
 				action: "follow",
 			};
 			const result = await postDataAPI("notify", msg, auth.token);
-			socket.socketClient.emit("createNotify", {
-				msg: { ...msg, _id: result.data.notify._id },
-			});
+			if (result.data.status) {
+				socket.socketClient.emit("createNotify", {
+					msg: { ...msg, _id: result.data.notify._id },
+				});
+			}
 		} catch (error) {
 			console.log(error);
 		}

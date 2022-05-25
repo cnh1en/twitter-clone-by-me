@@ -86,7 +86,7 @@ const Input = ({
 					action: "post",
 				};
 				const res = await postDataAPI("notify", msg, auth.token);
-				if (res.status) {
+				if (res.data.status) {
 					socket.socketClient.emit("createNotify", {
 						msg: { ...msg, _id: res.data.notify._id },
 					});
@@ -160,7 +160,7 @@ const Input = ({
 						action: "comment",
 					};
 					const result = await postDataAPI("notify", msg, auth.token);
-					if (result.status) {
+					if (result.data.status) {
 						socket.socketClient.emit("createNotify", {
 							msg: { ...msg, _id: result.data.notify._id },
 						});

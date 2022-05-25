@@ -5,10 +5,12 @@ const notifyCtrl = {
 	createNotify: async (req, res) => {
 		try {
 			const { id, recipients, url, text, content, image, action } = req.body;
-			const user = await Users.findById(recipients[0]);
 
-			if (user.mute.includes(req.user._id)) {
-				return res.json({ status: false });
+			if (recipients.length > 1) {
+				const user = await Users.findById(recipients[0]);
+				if (user.mute.includes(req.user._id)) {
+					return res.json({ status: false });
+				}
 			}
 			if (recipients.includes(req.user._id.toString())) return;
 			const notify = new Notifies({
