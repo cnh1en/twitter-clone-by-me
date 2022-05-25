@@ -39,6 +39,28 @@ const userCtrl = {
 		}
 	},
 
+	muteUser: async (req, res) => {
+		try {
+			await Users.findByIdAndUpdate(req.user._id, {
+				$push: { mute: req.params.id },
+			});
+
+			return res.status(200).json({ msg: "Muted" });
+		} catch (error) {
+			return res.status(500).json({ msg: error.message });
+		}
+	},
+	unmuteUser: async (req, res) => {
+		try {
+			await Users.findByIdAndUpdate(req.user._id, {
+				$pull: { mute: req.params.id },
+			});
+
+			return res.status(200).json({ msg: "Unmuted" });
+		} catch (error) {
+			return res.status(500).json({ msg: error.message });
+		}
+	},
 	follow: async (req, res) => {
 		try {
 			const user = await Users.find({

@@ -86,11 +86,11 @@ const SocketClient = () => {
 
 	useEffect(() => {
 		socket.socketClient.on("createNotifyToClient", ({ msg }) => {
-			console.log({ msg });
 			dispatch(createNotify(msg));
 		});
 		return () => socket.socketClient.off("createNotifyToClient");
 	}, [auth.user._id, socket.socketClient, dispatch]);
+
 	useEffect(() => {
 		socket.socketClient.on("createMessageToClient", (message) => {
 			dispatch(createMessage(message));

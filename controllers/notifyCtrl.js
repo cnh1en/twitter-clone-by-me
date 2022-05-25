@@ -1,9 +1,15 @@
 import Notifies from "../models/notifyModel.js";
+import Users from "../models/userModel.js";
 
 const notifyCtrl = {
 	createNotify: async (req, res) => {
 		try {
 			const { id, recipients, url, text, content, image, action } = req.body;
+			const user = await Users.findById(recipients[0]);
+
+			if (user.mute.includes(req.user._id)) {
+				return res.json({ status: false });
+			}
 			if (recipients.includes(req.user._id.toString())) return;
 			const notify = new Notifies({
 				id,
@@ -17,7 +23,7 @@ const notifyCtrl = {
 			});
 			await notify.save();
 
-			return res.json({ notify });
+			return res.json({ notify, status: true });
 		} catch (error) {
 			return res.status(500).json({ msg: error.message });
 		}

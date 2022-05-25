@@ -10,12 +10,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
+import { updateAuthUser } from "../redux/authSlice";
 import { deleteInBookmarks, pushInBookmarks } from "../redux/bookmarkSlice";
 import { openModal } from "../redux/modalSlice";
 import { deleteComment } from "../redux/postSelectedSlice";
 import { deletePost, updatePost, updatePostP2 } from "../redux/postSlice";
 import { deletePostProfile } from "../redux/profileSlice";
-import { deleteDataAPI, patchDataAPI } from "../utils/fetchData";
+import { deleteDataAPI, patchDataAPI, postDataAPI } from "../utils/fetchData";
 import RemovePostModal from "./modal/RemovePostModal";
 
 const PostOptionModal = ({ auth, post }) => {
@@ -25,11 +26,12 @@ const PostOptionModal = ({ auth, post }) => {
 		bookmark,
 		post: { posts },
 	} = useSelector((state) => state);
-
 	const dispatch = useDispatch();
 	const { page, id } = useParams();
 	const navigate = useNavigate();
+
 	const [checkBookmark, setBookmark] = useState(false);
+	const [follow, setFollow] = useState(false);
 
 	const handleRemovePost = async () => {
 		try {
@@ -111,6 +113,33 @@ const PostOptionModal = ({ auth, post }) => {
 		}
 	};
 
+	const handleFollow = async () => {
+		try {
+			setFollow(true);
+			dispatch(
+				updateAuthUser({ following: [...auth.user.following, post.user] })
+			);
+			await postDataAPI(`user/follow/${post.user._id}`, null, auth.token);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleUnfollow = async () => {
+		try {
+			setFollow(false);
+			dispatch(
+				updateAuthUser({
+					following: auth.user.following.filter(
+						(item) => item._id !== post.user._id
+					),
+				})
+			);
+			await postDataAPI(`user/unfollow/${post.user._id}`, null, auth.token);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	useEffect(() => {
 		if (
 			post.bookmarks.length &&
@@ -119,28 +148,33 @@ const PostOptionModal = ({ auth, post }) => {
 			setBookmark(true);
 		} else setBookmark(false);
 	}, [auth.user._id, post.bookmarks]);
+
+	useEffect(() => {
+		if (!auth.user.following.every((item) => item._id !== post.user._id)) {
+			setFollow(true);
+		} else setFollow(false);
+	}, [post.user._id, auth.user.following]);
+
 	return (
 		<div>
 			<div className="space-y-2">
 				{auth.user._id !== post.user._id && (
 					<>
 						<div className="follow flex gap-4 items-center py-2">
-							{!auth.user.following.every(
-								(item) => item._id !== post.user._id
-							) ? (
-								<>
+							{follow ? (
+								<div className="flex gap-4" onClick={handleUnfollow}>
 									<UserRemoveIcon className="h-5 text-[#71767B] " />
 									<span className="font-[400] text-[15px]">
 										Unfollow @{post.user.username}
 									</span>
-								</>
+								</div>
 							) : (
-								<>
+								<div className="flex gap-4" onClick={handleFollow}>
 									<UserAddIcon className="h-5 text-[#71767B] " />
 									<span className="font-[400] text-[15px]">
 										Follow @{post.user.username}
 									</span>
-								</>
+								</div>
 							)}
 						</div>
 						{!checkBookmark ? (
@@ -162,12 +196,7 @@ const PostOptionModal = ({ auth, post }) => {
 								</span>
 							</div>
 						)}
-						<div className="follow flex gap-4 items-center py-2">
-							<BanIcon className="h-5 text-[#71767B]" />
-							<span className="font-[400] text-[15px]">
-								Mute @{post.user.username}
-							</span>
-						</div>
+
 						<div className="follow flex gap-4 items-center py-2">
 							<FlagIcon className="h-5 text-[#71767B]" />
 							<span className="font-[400] text-[15px]">

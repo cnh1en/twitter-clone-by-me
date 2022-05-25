@@ -96,9 +96,11 @@ const Post = ({ post }) => {
 			};
 			/// SOCKET
 			const result = await postDataAPI("notify", msg, auth.token);
-			socket.socketClient.emit("createNotify", {
-				msg: { ...msg, _id: result.data.notify._id },
-			});
+			if (result.status) {
+				socket.socketClient.emit("createNotify", {
+					msg: { ...msg, _id: result.data.notify._id },
+				});
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -177,9 +179,11 @@ const Post = ({ post }) => {
 			};
 			/// SOCKET
 			const result = await postDataAPI("notify", msg, auth.token);
-			socket.socketClient.emit("createNotify", {
-				msg: { ...msg, _id: result.data.notify._id },
-			});
+			if (result.status) {
+				socket.socketClient.emit("createNotify", {
+					msg: { ...msg, _id: result.data.notify._id },
+				});
+			}
 		} catch (error) {
 			console.log(error);
 		}

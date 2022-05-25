@@ -1,15 +1,13 @@
+import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { io } from "socket.io-client";
 import Widget from "../components/home/Widget";
 import Loading from "../components/Loading";
 import Sidebar from "../components/sidebar/Sidebar";
-import { getSocket } from "../redux/socketSlice";
-import SocketClient from "../SocketClient";
-import { isEmpty } from "lodash";
-import { getDataAPI } from "../utils/fetchData";
 import { getIsRead, getNotifies } from "../redux/notifySlice";
+import SocketClient from "../SocketClient";
+import { getDataAPI } from "../utils/fetchData";
 
 const Home = () => {
 	const { loading, auth, socket } = useSelector((state) => state);

@@ -1,11 +1,13 @@
 import { MailIcon } from "@heroicons/react/outline";
 import moment from "moment";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Avatar from "../Avatar";
 import EditProfile from "./EditProfile";
 import ReactTooltip from "react-tooltip";
 import { useNavigate } from "react-router";
+import { patchDataAPI } from "../../utils/fetchData";
+import { updateAuthUser, updateMute } from "../../redux/authSlice";
 
 const ProfileHeader = ({
 	editProfile,
@@ -22,7 +24,48 @@ const ProfileHeader = ({
 }) => {
 	const { auth, profile } = useSelector((state) => state);
 	const navigate = useNavigate();
+	const [mute, setMute] = useState(false);
+	const dispatch = useDispatch();
 
+	const handleMute = async () => {
+		try {
+			setMute(true);
+			dispatch(
+				updateAuthUser({
+					mute: [...auth.user.mute, profile.info._id],
+				})
+			);
+			await patchDataAPI(`user/mute/${profile.info._id}`, null, auth.token);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleUnmute = async () => {
+		try {
+			setMute(false);
+			dispatch(
+				updateAuthUser({
+					mute: auth.user.mute.filter((item) => item !== profile.info._id),
+				})
+			);
+			await patchDataAPI(
+				`user/unmute/${profile.info._id}`,
+				null,
+				auth.token
+			);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		if (
+			auth.user.mute.length > 0 &&
+			!auth.user.mute.every((item) => item !== profile.info._id)
+		) {
+			setMute(true);
+		} else setMute(false);
+	}, [auth.user.mute, profile.info._id]);
 	return (
 		<div className="profile-head">
 			<div className="">
@@ -40,6 +83,43 @@ const ProfileHeader = ({
 					/>
 				</div>
 				<div className="flex justify-end mr-4 mt-4 items-center gap-3">
+					{auth.user._id !== id &&
+						(!mute ? (
+							<div
+								className="w-[34px] h-[34px] flex-center rounded-full border-[1px] border-color cursor-pointer hover:bg-[#eff3f4]/10"
+								data-tip
+								data-for="notifyTip"
+								onClick={handleMute}
+							>
+								<i className="ri-notification-line text-xl"></i>
+								<ReactTooltip
+									id="notifyTip"
+									place="bottom"
+									effect="solid"
+									delayShow={500}
+								>
+									Notify
+								</ReactTooltip>
+							</div>
+						) : (
+							<div
+								className="w-[34px] h-[34px] flex-center rounded-full border-[1px] border-color cursor-pointer hover:bg-[#eff3f4]/10"
+								data-tip
+								data-for="notifyTip"
+								onClick={handleUnmute}
+							>
+								<i className="ri-notification-off-line text-xl"></i>
+								<ReactTooltip
+									id="notifyTip"
+									place="bottom"
+									effect="solid"
+									delayShow={500}
+								>
+									Turn on notifications
+								</ReactTooltip>
+							</div>
+						))}
+
 					{auth.user._id !== id && (
 						<div
 							className="w-[34px] h-[34px] flex-center rounded-full border-[1px] border-color cursor-pointer hover:bg-[#eff3f4]/10"
@@ -58,6 +138,7 @@ const ProfileHeader = ({
 							</ReactTooltip>
 						</div>
 					)}
+
 					{auth.user._id === id ? (
 						<button
 							className="edit-profile px-3 py-1 font-[500] rounded-full border-[1px] border-color block   bg-black hover:bg-[#eff3f41a]"

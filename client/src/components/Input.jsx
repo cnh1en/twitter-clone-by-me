@@ -86,9 +86,11 @@ const Input = ({
 					action: "post",
 				};
 				const res = await postDataAPI("notify", msg, auth.token);
-				socket.socketClient.emit("createNotify", {
-					msg: { ...msg, _id: res.data.notify._id },
-				});
+				if (res.status) {
+					socket.socketClient.emit("createNotify", {
+						msg: { ...msg, _id: res.data.notify._id },
+					});
+				}
 
 				back && navigate(-1);
 				setContent("");
@@ -158,9 +160,11 @@ const Input = ({
 						action: "comment",
 					};
 					const result = await postDataAPI("notify", msg, auth.token);
-					socket.socketClient.emit("createNotify", {
-						msg: { ...msg, _id: result.data.notify._id },
-					});
+					if (result.status) {
+						socket.socketClient.emit("createNotify", {
+							msg: { ...msg, _id: result.data.notify._id },
+						});
+					}
 				}
 				setStartAnimation && setStartAnimation(false);
 				setContent("");

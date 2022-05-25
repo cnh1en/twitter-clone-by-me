@@ -13,4 +13,6 @@ router.route("/unfollow/:id").post(auth, userCtrl.unfollow);
 router.route("/followers/:id").get(auth, userCtrl.getFollowers);
 router.route("/following/:id").get(auth, userCtrl.getFollowing);
 
+router.route("/mute/:id").patch(auth, userCtrl.muteUser);
+router.route("/unmute/:id").patch(auth, userCtrl.unmuteUser);
 export default router;
