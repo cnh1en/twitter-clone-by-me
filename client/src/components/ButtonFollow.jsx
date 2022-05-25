@@ -35,7 +35,7 @@ const ButtonFollow = ({ user }) => {
 			const result = await postDataAPI("notify", msg, auth.token);
 			if (result.data.status) {
 				socket.socketClient.emit("createNotify", {
-					msg: { ...msg, _id: result.data.notify._id },
+					msg: result.data.notify,
 				});
 			}
 		} catch (error) {

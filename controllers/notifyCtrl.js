@@ -5,23 +5,27 @@ const notifyCtrl = {
 	createNotify: async (req, res) => {
 		try {
 			const { id, recipients, url, text, content, image, action } = req.body;
-
-			if (recipients.length === 1) {
-				// chua toi uu
-				const user = await Users.findById(recipients[0]);
-				if (user.mute.includes(req.user._id)) {
-					return res.json({ status: false });
+			let users = [];
+			for (const recipient of recipients) {
+				const user = await Users.findById(recipient);
+				if (!user.mute.includes(req.user._id.toString())) {
+					users.push(user._id.toString());
 				}
 			}
+			if (!users.length) {
+				return res.json({ status: false });
+			}
+
 			if (recipients.includes(req.user._id.toString())) return;
+
 			const notify = new Notifies({
 				id,
-				recipients,
+				recipients: users,
 				url,
 				text,
 				content,
 				image,
-				user: req.user._id,
+				user: req.user,
 				action,
 			});
 			await notify.save();

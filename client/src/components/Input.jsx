@@ -88,7 +88,7 @@ const Input = ({
 				const res = await postDataAPI("notify", msg, auth.token);
 				if (res.data.status) {
 					socket.socketClient.emit("createNotify", {
-						msg: { ...msg, _id: res.data.notify._id },
+						msg: res.data.notify,
 					});
 				}
 
@@ -162,7 +162,7 @@ const Input = ({
 					const result = await postDataAPI("notify", msg, auth.token);
 					if (result.data.status) {
 						socket.socketClient.emit("createNotify", {
-							msg: { ...msg, _id: result.data.notify._id },
+							msg: result.data.notify,
 						});
 					}
 				}
