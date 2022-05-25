@@ -6,7 +6,8 @@ const notifyCtrl = {
 		try {
 			const { id, recipients, url, text, content, image, action } = req.body;
 
-			if (recipients.length > 1) {
+			if (recipients.length === 1) {
+				// chua toi uu
 				const user = await Users.findById(recipients[0]);
 				if (user.mute.includes(req.user._id)) {
 					return res.json({ status: false });
