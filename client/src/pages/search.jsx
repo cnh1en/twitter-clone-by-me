@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import Avatar from "../components/Avatar";
 import ButtonFollow from "../components/ButtonFollow";
 import SearchBar from "../components/SearchBar";
 import Chicken from "../images/chicken.png";
+import { useParams } from "react-router";
 
 const Search = () => {
 	const navigate = useNavigate();
@@ -12,6 +13,11 @@ const Search = () => {
 	const [loading, setLoading] = useState(false);
 	const [emptyUsers, setEmptyUsers] = useState(false);
 	const [search, setSearch] = useState("");
+	const { page } = useParams();
+
+	useEffect(() => {
+		document.title = "Search";
+	}, [page]);
 
 	return (
 		<div className="width-page">
@@ -87,7 +93,7 @@ const Search = () => {
 				{!users.length && !emptyUsers && !loading && (
 					<div className="w-[320px] md:w-[400px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 						<div>
-							<h1 className="font-semibold text-white text-[30px]">
+							<h1 className="font-semibold text-white text-[30px] text-center">
 								Try searching for people
 							</h1>
 						</div>

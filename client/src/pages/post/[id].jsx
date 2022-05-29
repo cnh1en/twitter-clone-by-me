@@ -75,7 +75,9 @@ const Post = () => {
 					</div>
 				</>
 			) : (
-				<Loading />
+				<div className="width-page z-50 bg-black">
+					<Loading />
+				</div>
 			)}
 		</div>
 	);

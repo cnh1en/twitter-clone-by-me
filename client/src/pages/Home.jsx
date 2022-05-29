@@ -32,7 +32,11 @@ const Home = () => {
 			<Sidebar />
 			<Outlet />
 			{auth.token && !isEmpty(socket.socketClient) && <SocketClient />}
-			{loading && <Loading />}
+			{loading && (
+				<div className="width-page z-50 bg-black">
+					<Loading />
+				</div>
+			)}
 			<Widget />
 		</div>
 	);

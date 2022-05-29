@@ -16,13 +16,13 @@ const CardUser = ({ item }) => {
 	const handleFollow = async (user) => {
 		try {
 			setShowFollow(true);
+			await postDataAPI(`user/follow/${user._id}`, null, auth.token);
 			if (id === auth.user._id) {
 				dispatch(myFollow(item));
 			}
 			dispatch(
 				updateAuthUser({ following: [...auth.user.following, user] })
 			);
-			await postDataAPI(`user/follow/${user._id}`, null, auth.token);
 
 			const msg = {
 				id: user._id,
@@ -48,6 +48,7 @@ const CardUser = ({ item }) => {
 	const handleUnfollow = async (user) => {
 		try {
 			setShowFollow(false);
+			await postDataAPI(`user/unfollow/${user._id}`, null, auth.token);
 			if (id === auth.user._id) {
 				dispatch(myUnfollow(item));
 			}
@@ -58,8 +59,6 @@ const CardUser = ({ item }) => {
 					),
 				})
 			);
-
-			await postDataAPI(`user/unfollow/${user._id}`, null, auth.token);
 		} catch (error) {
 			console.log(error);
 		}

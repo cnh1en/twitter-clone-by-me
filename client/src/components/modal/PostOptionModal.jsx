@@ -10,14 +10,19 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { updateAuthUser } from "../redux/authSlice";
-import { deleteInBookmarks, pushInBookmarks } from "../redux/bookmarkSlice";
-import { openModal } from "../redux/modalSlice";
-import { deleteComment } from "../redux/postSelectedSlice";
-import { deletePost, updatePost, updatePostP2 } from "../redux/postSlice";
-import { deletePostProfile } from "../redux/profileSlice";
-import { deleteDataAPI, patchDataAPI, postDataAPI } from "../utils/fetchData";
-import RemovePostModal from "./modal/RemovePostModal";
+import { updateAuthUser } from "../../redux/authSlice";
+import { deleteInBookmarks, pushInBookmarks } from "../../redux/bookmarkSlice";
+import { openModal } from "../../redux/modalSlice";
+import { deleteComment } from "../../redux/postSelectedSlice";
+import { deletePost, updatePost, updatePostP2 } from "../../redux/postSlice";
+import { deletePostProfile } from "../../redux/profileSlice";
+import {
+	deleteDataAPI,
+	patchDataAPI,
+	postDataAPI,
+} from "../../utils/fetchData";
+import RemovePostModal from "./RemovePostModal";
+import UnfollowModal from "./UnfollowModal";
 
 const PostOptionModal = ({ auth, post }) => {
 	const [openRemovePostModal, setRemovePostModal] = useState(false);
@@ -32,6 +37,7 @@ const PostOptionModal = ({ auth, post }) => {
 
 	const [checkBookmark, setBookmark] = useState(false);
 	const [follow, setFollow] = useState(false);
+	const [unfollowModal, setUnfollowModal] = useState(false);
 
 	const handleRemovePost = async () => {
 		try {
@@ -116,17 +122,19 @@ const PostOptionModal = ({ auth, post }) => {
 	const handleFollow = async () => {
 		try {
 			setFollow(true);
+			await postDataAPI(`user/follow/${post.user._id}`, null, auth.token);
 			dispatch(
 				updateAuthUser({ following: [...auth.user.following, post.user] })
 			);
-			await postDataAPI(`user/follow/${post.user._id}`, null, auth.token);
+			dispatch(openModal(false));
 		} catch (error) {
 			console.log(error);
 		}
 	};
 	const handleUnfollow = async () => {
 		try {
-			setFollow(false);
+			// setUnfollowModal(true);
+			await postDataAPI(`user/unfollow/${post.user._id}`, null, auth.token);
 			dispatch(
 				updateAuthUser({
 					following: auth.user.following.filter(
@@ -134,7 +142,8 @@ const PostOptionModal = ({ auth, post }) => {
 					),
 				})
 			);
-			await postDataAPI(`user/unfollow/${post.user._id}`, null, auth.token);
+			setFollow(false);
+			dispatch(openModal(false));
 		} catch (error) {
 			console.log(error);
 		}
@@ -162,7 +171,10 @@ const PostOptionModal = ({ auth, post }) => {
 					<>
 						<div className="follow flex gap-4 items-center py-2">
 							{follow ? (
-								<div className="flex gap-4" onClick={handleUnfollow}>
+								<div
+									className="flex gap-4"
+									onClick={() => setUnfollowModal(true)}
+								>
 									<UserRemoveIcon className="h-5 text-[#71767B] " />
 									<span className="font-[400] text-[15px]">
 										Unfollow @{post.user.username}
@@ -248,6 +260,16 @@ const PostOptionModal = ({ auth, post }) => {
 					<RemovePostModal
 						setRemovePostModal={setRemovePostModal}
 						handleRemovePost={handleRemovePost}
+					/>
+				</div>
+			)}
+
+			{unfollowModal && (
+				<div className="fixed top-0 left-0 w-full h-screen cursor-default">
+					<UnfollowModal
+						handleUnfollow={handleUnfollow}
+						setUnfollowModal={setUnfollowModal}
+						username={post.user.username}
 					/>
 				</div>
 			)}

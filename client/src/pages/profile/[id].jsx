@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import Follow from "../../components/Follow";
+import UnfollowModal from "../../components/modal/UnfollowModal";
 import ProfileBody from "../../components/profile/ProfileBody";
 import ProfileHeader from "../../components/profile/ProfileHeader";
 import { updateAuthUser } from "../../redux/authSlice";
@@ -28,6 +29,7 @@ const Profile = () => {
 	const containerRef = useRef(null);
 	const followRef = useRef(null);
 	const [show, setShow] = useState(false);
+	const [unfollowModal, setUnfollowModal] = useState(false);
 	const [showFollow, setFollow] = useState(false);
 	const [showButtonFollow, setShowButtonFollow] = useState(false);
 	const [tab, setTab] = useState(false);
@@ -35,7 +37,7 @@ const Profile = () => {
 	// HANDLE
 	const handleScroll = () => {
 		if (followRef.current) {
-			if (containerRef.current.scrollTop >= 252) {
+			if (containerRef.current.scrollTop >= 300) {
 				setShow(true);
 			} else {
 				setShow(false);
@@ -188,7 +190,7 @@ const Profile = () => {
 										show ? "block" : "hidden"
 									}`}
 									ref={followRef}
-									onClick={handleUnfollow}
+									onClick={() => setUnfollowModal(true)}
 								>
 									Unfollow
 								</button>
@@ -220,6 +222,16 @@ const Profile = () => {
 					tab={tab}
 					setTab={setTab}
 				/>
+			)}
+
+			{unfollowModal && (
+				<div className="fixed top-0 left-0 w-full h-screen cursor-default z-30">
+					<UnfollowModal
+						handleUnfollow={handleUnfollow}
+						setUnfollowModal={setUnfollowModal}
+						username={profile.info.username}
+					/>
+				</div>
 			)}
 		</div>
 	);

@@ -39,7 +39,7 @@ import { postDataAPI } from "../../utils/fetchData";
 import Avatar from "../Avatar";
 import InfoTip from "../InfoTip";
 import ReplyModal from "../modal/ReplyModal";
-import PostOptionModal from "../PostOptionModal";
+import PostOptionModal from "../modal/PostOptionModal";
 
 const Post = ({ post }) => {
 	const { auth, modal, socket } = useSelector((state) => state);
@@ -230,6 +230,9 @@ const Post = ({ post }) => {
 	};
 	const handleMouseOut = (e) => {
 		setShowInfoTip(false);
+	};
+	const handleCopyLink = () => {
+		navigator.clipboard.writeText(`/post/${post._id}`);
 	};
 	useEffect(() => {
 		if (
@@ -465,7 +468,10 @@ const Post = ({ post }) => {
 					data-tip
 					data-for="shareTip"
 				>
-					<div className="icon group-hover:bg-[#1d9bf0]/10 p-2 rounded-full">
+					<div
+						className="icon group-hover:bg-[#1d9bf0]/10 p-2 rounded-full"
+						onClick={handleCopyLink}
+					>
 						<ShareIcon className="h-5 group-hover:text-[#1d9bf0]" />
 					</div>
 					<ReactTooltip

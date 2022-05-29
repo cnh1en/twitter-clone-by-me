@@ -8,6 +8,7 @@ import ReactTooltip from "react-tooltip";
 import { useNavigate } from "react-router";
 import { patchDataAPI } from "../../utils/fetchData";
 import { updateAuthUser, updateMute } from "../../redux/authSlice";
+import UnfollowModal from "../modal/UnfollowModal";
 
 const ProfileHeader = ({
 	editProfile,
@@ -25,6 +26,7 @@ const ProfileHeader = ({
 	const { auth, profile } = useSelector((state) => state);
 	const navigate = useNavigate();
 	const [mute, setMute] = useState(false);
+	const [unfollowModal, setUnfollowModal] = useState(false);
 	const dispatch = useDispatch();
 
 	const handleMute = async () => {
@@ -84,6 +86,7 @@ const ProfileHeader = ({
 				</div>
 				<div className="flex justify-end mr-4 mt-4 items-center gap-3">
 					{auth.user._id !== id &&
+						!auth.user.following.every((item) => item._id !== id) &&
 						(!mute ? (
 							<div
 								className="w-[34px] h-[34px] flex-center rounded-full border-[1px] border-color cursor-pointer hover:bg-[#eff3f4]/10"
@@ -149,7 +152,7 @@ const ProfileHeader = ({
 					) : follow ? (
 						<button
 							className="unfollow px-3 py-1 font-[500] rounded-full border-[1px] border-color block   text-black bg-[#EFF3F4] hover:bg-[#D7DBDC]"
-							onClick={handleUnfollow}
+							onClick={() => setUnfollowModal(true)}
 						>
 							Unfollow
 						</button>
@@ -265,6 +268,16 @@ const ProfileHeader = ({
 					)}
 				</div>
 			</div>
+
+			{unfollowModal && (
+				<div className="fixed top-0 left-0 w-full h-screen cursor-default z-30">
+					<UnfollowModal
+						username={profile.info.username}
+						handleUnfollow={handleUnfollow}
+						setUnfollowModal={setUnfollowModal}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };

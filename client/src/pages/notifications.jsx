@@ -6,9 +6,9 @@ import {
 	TrashIcon,
 	UsersIcon,
 } from "@heroicons/react/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Avatar from "../components/Avatar";
 import RemoveAllNotifiesModal from "../components/modal/RemoveAllNotifiesModal";
@@ -20,6 +20,7 @@ const Notifications = () => {
 	const { auth, notify } = useSelector((state) => state);
 	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
+	const { page } = useParams();
 
 	const handleReadNotify = async (item) => {
 		try {
@@ -43,6 +44,11 @@ const Notifications = () => {
 			console.log(error);
 		}
 	};
+
+	useEffect(() => {
+		document.title = "Notifications";
+	}, [page]);
+
 	return (
 		<div className="width-page divide-y-[1px] divide-[#2F3336] overflow-scroll scrollbar">
 			<div className="py-4 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20">

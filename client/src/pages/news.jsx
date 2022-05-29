@@ -1,20 +1,33 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Loading from "../components/Loading";
 import SearchBar from "../components/SearchBar";
 
 const News = () => {
 	const navigate = useNavigate();
-	const [search, setSearch] = useState("bitcoin");
+	const { page } = useParams();
+	const [search, setSearch] = useState([
+		"usa",
+		"bitcoin",
+		"technology",
+		"animals",
+		"sport",
+		"games",
+	]);
 	const [news, setNews] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
+		document.title = "News";
+	}, [page]);
+	useEffect(() => {
 		setLoading(true);
 		axios
 			.get(
-				`https://newsapi.org/v2/everything?q=${search}&apiKey=57f41659724b4f2893e226b1dba8e6a3`
+				`https://newsapi.org/v2/everything?q=${
+					search[Math.floor(Math.random() * 6)]
+				}&apiKey=57f41659724b4f2893e226b1dba8e6a3`
 			)
 			.then((res) => {
 				setNews(res.data.articles);
@@ -70,7 +83,9 @@ const News = () => {
 						</div>
 					))
 				) : (
-					<Loading />
+					<div className="width-page z-50 bg-black">
+						<Loading />
+					</div>
 				)}
 			</div>
 		</div>
