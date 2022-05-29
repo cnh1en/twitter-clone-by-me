@@ -27,7 +27,7 @@ const Bookmarks = () => {
 		document.title = "Bookmarks";
 	}, [page]);
 	return (
-		<div className="width-page">
+		<div className="width-page h-screen overflow-auto scrollbar pb-8">
 			<div className="p-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20">
 				<div className="flex justify-between items-center">
 					<div className="flex items-center gap-4">

@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import io from "socket.io-client";
 import Feed from "./components/home/Feed";
 import ActiveUser from "./pages/auth/ActiveUser";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
 import { fetchDataUser } from "./redux/authSlice";
-import { getPosts } from "./redux/postSlice";
+import { loading } from "./redux/loadSlice";
+import { getSocket } from "./redux/socketSlice";
 import PageRender from "./routes/PageRender";
 import PrivateRoute from "./routes/PrivateRoute";
-import { loading } from "./redux/loadSlice";
-import io from "socket.io-client";
-import { getSocket } from "./redux/socketSlice";
 
 function App() {
 	const dispatch = useDispatch();
-	const { auth, modal, socket } = useSelector((state) => state);
+	const { modal } = useSelector((state) => state);
 
 	useEffect(() => {
 		const firstLogin = localStorage.getItem("firstLogin");

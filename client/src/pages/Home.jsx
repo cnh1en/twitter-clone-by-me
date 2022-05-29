@@ -8,6 +8,7 @@ import Sidebar from "../components/sidebar/Sidebar";
 import { getIsRead, getNotifies } from "../redux/notifySlice";
 import SocketClient from "../SocketClient";
 import { getDataAPI } from "../utils/fetchData";
+import { ToastContainer } from "react-toastify";
 
 const Home = () => {
 	const { loading, auth, socket } = useSelector((state) => state);
@@ -37,6 +38,17 @@ const Home = () => {
 					<Loading />
 				</div>
 			)}
+			<ToastContainer
+				position="bottom-center"
+				autoClose={1000}
+				hideProgressBar
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
 			<Widget />
 		</div>
 	);

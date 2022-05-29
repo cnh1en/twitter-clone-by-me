@@ -1,5 +1,4 @@
 import {
-	BanIcon,
 	DocumentAddIcon,
 	FlagIcon,
 	PencilIcon,
@@ -24,11 +23,10 @@ import {
 import RemovePostModal from "./RemovePostModal";
 import UnfollowModal from "./UnfollowModal";
 
-const PostOptionModal = ({ auth, post }) => {
+const PostOptionModal = ({ auth, post, setShowOptionPostModal }) => {
 	const [openRemovePostModal, setRemovePostModal] = useState(false);
 	const {
 		postSelected,
-		bookmark,
 		post: { posts },
 	} = useSelector((state) => state);
 	const dispatch = useDispatch();
@@ -97,9 +95,14 @@ const PostOptionModal = ({ auth, post }) => {
 
 	const handlePushInBookmarks = async () => {
 		try {
-			const newPost = { ...post, bookmarks: [...post.bookmarks, auth.user] };
+			const newPost = {
+				...post,
+				bookmarks: [...post.bookmarks, auth.user._id],
+			};
 			dispatch(pushInBookmarks(newPost));
+			dispatch(updatePost({ id: newPost._id, newPost }));
 			setBookmark(true);
+			setShowOptionPostModal(false);
 			dispatch(openModal(false));
 			await patchDataAPI(`/bookmark/${post._id}`, null, auth.token);
 		} catch (error) {
@@ -109,10 +112,15 @@ const PostOptionModal = ({ auth, post }) => {
 
 	const handleDeleteInBookmarks = async () => {
 		try {
+			const newPost = {
+				...post,
+				bookmarks: post.bookmarks.filter((item) => item !== auth.user._id),
+			};
 			dispatch(deleteInBookmarks(post._id));
+			dispatch(updatePost({ id: newPost._id, newPost }));
 			setBookmark(false);
+			setShowOptionPostModal(false);
 			dispatch(openModal(false));
-
 			await patchDataAPI(`/bookmark/${post._id}/destroy`, null, auth.token);
 		} catch (error) {
 			console.log(error);
@@ -164,6 +172,7 @@ const PostOptionModal = ({ auth, post }) => {
 		} else setFollow(false);
 	}, [post.user._id, auth.user.following]);
 
+	useEffect(() => {}, []);
 	return (
 		<div>
 			<div className="space-y-2">

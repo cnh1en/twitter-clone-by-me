@@ -38,8 +38,8 @@ import {
 import { postDataAPI } from "../../utils/fetchData";
 import Avatar from "../Avatar";
 import InfoTip from "../InfoTip";
-import ReplyModal from "../modal/ReplyModal";
 import PostOptionModal from "../modal/PostOptionModal";
+import ReplyModal from "../modal/ReplyModal";
 
 const Post = ({ post }) => {
 	const { auth, modal, socket } = useSelector((state) => state);
@@ -347,7 +347,11 @@ const Post = ({ post }) => {
 									}`}
 									ref={modalRef}
 								>
-									<PostOptionModal auth={auth} post={post} />
+									<PostOptionModal
+										auth={auth}
+										post={post}
+										setShowOptionPostModal={setShowOptionPostModal}
+									/>
 								</div>
 							)}
 						</div>
