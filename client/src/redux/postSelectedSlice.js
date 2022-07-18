@@ -77,6 +77,9 @@ const postSelectedSlice = createSlice({
 					: item
 			);
 		},
+		updatePostSelected: (state, action) => {
+			state.info = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -116,4 +119,5 @@ export const {
 	unretweetComment,
 	deleteComment,
 	commentInComment,
+	updatePostSelected,
 } = postSelectedSlice.actions;

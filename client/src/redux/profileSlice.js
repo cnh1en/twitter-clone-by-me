@@ -52,9 +52,31 @@ const profileSlice = createSlice({
 		updateProfileUser: (state, action) => {
 			state.info = action.payload;
 		},
+		pushInBookmarkProfile: (state, action) => {
+			const { post } = action.payload;
+			state.posts = EditData(state.posts, post._id, post);
+			state.retweets = EditData(state.retweets, post._id, post);
+			state.likePosts = EditData(state.likePosts, post._id, post);
+		},
+		deleteInBookmarksProfile: (state, action) => {
+			state.posts = EditData(
+				state.posts,
+				action.payload._id,
+				action.payload
+			);
+			state.retweets = EditData(
+				state.retweets,
+				action.payload._id,
+				action.payload
+			);
+			state.likePosts = EditData(
+				state.likePosts,
+				action.payload._id,
+				action.payload
+			);
+		},
 		likePostProfile: (state, action) => {
-			const { socket, post } = action.payload;
-			console.log(action.payload);
+			const { post } = action.payload;
 			state.posts = EditData(state.posts, post._id, post);
 			state.retweets = EditData(state.retweets, post._id, post);
 			state.likePosts = EditData(state.likePosts, post._id, post);
@@ -140,4 +162,6 @@ export const {
 	retweetProfile,
 	unretweetPostProfile,
 	deletePostProfile,
+	pushInBookmarkProfile,
+	deleteInBookmarksProfile,
 } = profileSlice.actions;

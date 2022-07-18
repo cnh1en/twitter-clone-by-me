@@ -52,9 +52,7 @@ const notifyCtrl = {
 				recipients: req.user._id,
 			})
 				.sort("-createdAt")
-				.populate("user", "avatar username")
-				.limit(10);
-
+				.populate("user", "avatar username");
 			return res.json({ notifies });
 		} catch (error) {
 			return res.status(500).json({ msg: error.message });

@@ -11,47 +11,46 @@ import { getDataAPI } from "../utils/fetchData";
 import { ToastContainer } from "react-toastify";
 
 const Home = () => {
-	const { loading, auth, socket } = useSelector((state) => state);
-	const dispatch = useDispatch();
+  const { loading, auth, socket } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-	useEffect(() => {
-		if (auth.token) {
-			getDataAPI("notifies", auth.token)
-				.then((res) => {
-					dispatch(getNotifies(res.data.notifies));
-					dispatch(
-						getIsRead(
-							res.data.notifies.filter((item) => !item.isRead).length
-						)
-					);
-				})
-				.catch((error) => console.log(error));
-		}
-	}, [auth.token, dispatch]);
-	return (
-		<div className="bg-[#000] w-full min-h-screen">
-			<Sidebar />
-			<Outlet />
-			{auth.token && !isEmpty(socket.socketClient) && <SocketClient />}
-			{loading && (
-				<div className="width-page z-50 bg-black">
-					<Loading />
-				</div>
-			)}
-			<ToastContainer
-				position="bottom-center"
-				autoClose={1000}
-				hideProgressBar
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-			/>
-			<Widget />
-		</div>
-	);
+  useEffect(() => {
+    if (auth.token) {
+      getDataAPI("notifies", auth.token)
+        .then((res) => {
+          dispatch(getNotifies(res.data.notifies));
+          dispatch(
+            getIsRead(res.data.notifies.filter((item) => !item.isRead).length)
+          );
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [auth.token, dispatch]);
+
+  return (
+    <div className="bg-black w-full min-h-screen dark:bg-white">
+      <Sidebar />
+      <Outlet />
+      {auth.token && !isEmpty(socket.socketClient) && <SocketClient />}
+      {loading && (
+        <div className="width-page z-50 bg-black dark:bg-white">
+          <Loading />
+        </div>
+      )}
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Widget />
+    </div>
+  );
 };
 
 export default Home;

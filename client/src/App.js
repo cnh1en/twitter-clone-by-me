@@ -33,13 +33,6 @@ function App() {
 		return () => socket.close();
 	}, [dispatch]);
 
-	// useEffect(() => {
-	// 	if (auth.token) {
-	// 		dispatch(getPosts(auth.token));
-	// 		dispatch(loading(false));
-	// 	}
-	// }, [auth, dispatch]);
-
 	return (
 		<div className={`App ${modal && "pointer-events-none"} relative`}>
 			<BrowserRouter>

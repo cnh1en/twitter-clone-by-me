@@ -1,13 +1,11 @@
-import React, { useRef, useState } from "react";
-import SignIn from "../../images/signin.jpg";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { GoogleLogin } from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import SignIn from "../../images/signin.jpg";
 import { login } from "../../redux/authSlice";
-import { useEffect } from "react";
 import { postDataAPI } from "../../utils/fetchData";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 const Login = () => {
 	const [accountLogin, setAccountLogin] = useState({
@@ -19,8 +17,6 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const { auth } = useSelector((state) => state);
 
-	const facebookRef = useRef(null);
-
 	const handleInputChange = (e) => {
 		setAccountLogin({ ...accountLogin, [e.target.name]: e.target.value });
 	};
@@ -30,8 +26,6 @@ const Login = () => {
 		try {
 			const res = await postDataAPI("login", accountLogin, null);
 			localStorage.setItem("firstLogin", true);
-			console.log(res.data);
-
 			dispatch(login(res.data));
 			navigate("/");
 		} catch (error) {
