@@ -2,8 +2,8 @@ import React from "react";
 
 const RemoveAllNotifiesModal = ({ setShowModal, handleRemoveAllNotifies }) => {
   return (
-    <div className="absolute w-full h-full top-0 left-0 z-30 bg-black md:bg-transparent-config py-2 overflow-auto flex-center pointer-events-none">
-      <div className="w-[350px] p-8 bg-black borders-[1px] border-color rounded-2xl dark:bg-white">
+    <div className="absolute w-full h-full top-0 left-0 z-30 bg-black dark:bg-white dark:bg-transparent md:bg-transparent-config py-2 overflow-auto flex-center pointer-events-none">
+      <div className="w-[350px] p-8 bg-black borders-[1px] border-color rounded-2xl dark:bg-white dark:border dark:border-gray-300">
         <div className="top">
           <h1 className="text-[20px] mb-2 font-bold text-white dark:text-black">
             Delete all notifies?

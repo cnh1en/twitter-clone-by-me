@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
+import Header from "../../components/header/Header";
 import Loading from "../../components/Loading";
 import ComposeMessage from "../../components/messages/ComposeMessage";
 import { getDataAPI } from "../../utils/fetchData";
@@ -35,6 +36,9 @@ const Message = () => {
   return (
     <div className="width-page ">
       <div className="py-4 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black dark:bg-white z-20">
+        <div className="hidden">
+          <Header />
+        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span

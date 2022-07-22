@@ -16,12 +16,10 @@ const Home = () => {
 
   useEffect(() => {
     if (auth.token) {
-      getDataAPI("notifies", auth.token)
+      getDataAPI("/getNotReadNotifies", auth.token)
         .then((res) => {
-          dispatch(getNotifies(res.data.notifies));
-          dispatch(
-            getIsRead(res.data.notifies.filter((item) => !item.isRead).length)
-          );
+          // dispatch(getNotifies(res.data.notifies));
+          dispatch(getIsRead(res.data.notifies.length));
         })
         .catch((error) => console.log(error));
     }

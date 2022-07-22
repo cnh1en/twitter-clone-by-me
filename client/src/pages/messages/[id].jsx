@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import TextareaAutoSize from "react-textarea-autosize";
 import Avatar from "../../components/Avatar";
+import Header from "../../components/header/Header";
 import Loading from "../../components/Loading";
 import LoadingLine from "../../components/LoadingLine";
 import ComposeMessage from "../../components/messages/ComposeMessage";
@@ -142,6 +143,9 @@ const Conversation = () => {
   return !loading ? (
     <div className="width-page">
       <div className="py-4 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black dark:bg-white z-20">
+        <div className="hidden">
+          <Header />
+        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span

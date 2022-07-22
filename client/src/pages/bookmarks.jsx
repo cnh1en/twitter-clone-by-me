@@ -6,6 +6,7 @@ import { getDataAPI } from "../utils/fetchData";
 import Post from "../components/post/Post";
 import { useParams } from "react-router";
 import Loading from "../components/Loading";
+import Header from "../components/header/Header";
 
 const Bookmarks = () => {
   const { auth, bookmark } = useSelector((state) => state);
@@ -28,6 +29,9 @@ const Bookmarks = () => {
   }, [page]);
   return (
     <div className="width-page h-screen overflow-auto scrollbar pb-8">
+      <div className="hidden">
+        <Header />
+      </div>
       <div className="p-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20 dark:bg-white dark:bg-opacity-80">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">

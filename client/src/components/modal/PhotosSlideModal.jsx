@@ -50,7 +50,7 @@ const PhotosSlideModal = ({ images, setOpenPhotosSlide, indexImage }) => {
         className="absolute top-5 left-5 text-[30px] cursor-pointer z-50"
         onClick={() => setOpenPhotosSlide(false)}
       >
-        <i className="ri-close-line hover:hoverAnimation2"></i>
+        <i className="ri-close-line hover:hoverAnimation2 dark:hover:text-gray-500"></i>
       </div>
 
       <div className="w-3/4 h-[90vh]" ref={imageRef}>
@@ -59,13 +59,13 @@ const PhotosSlideModal = ({ images, setOpenPhotosSlide, indexImage }) => {
 
       {images.length > 1 && (
         <div ref={buttonRef}>
-          <div className="prev absolute top-1/2 -translate-y-1/2 left-10 z-50 hover:hoverAnimation2 cursor-pointer">
+          <div className="prev absolute top-1/2 -translate-y-1/2 left-10 z-50 hover:hoverAnimation2 cursor-pointer dark:hover:text-gray-500">
             <ArrowSmLeftIcon
               className="w-8 h-8"
               onClick={() => handleSelectImage(-1)}
             />
           </div>
-          <div className="next absolute top-1/2 -translate-y-1/2 right-10 z-50 hover:hoverAnimation2 cursor-pointer">
+          <div className="next absolute top-1/2 -translate-y-1/2 right-10 z-50 hover:hoverAnimation2 cursor-pointer dark:hover:text-gray-500">
             <ArrowSmRightIcon
               className="w-8 h-8"
               onClick={() => handleSelectImage(1)}

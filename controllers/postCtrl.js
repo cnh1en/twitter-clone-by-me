@@ -25,24 +25,20 @@ class APIfeatures {
     return this;
   }
 }
+
 const postCtrl = {
   getPosts: async (req, res) => {
     try {
-      // const features = new APIfeatures(
-      //   Posts.find({
-      //     user: {
-      //       $in: [req.user._id, ...req.user.following],
-      //     },
-      //     reply: { $size: 0 },
-      //   }),
-      //   req.query
-      // ).paginating();
-      const posts = await Posts.find({
-        user: {
-          $in: [req.user._id, ...req.user.following],
-        },
-        reply: { $size: 0 },
-      })
+      const features = new APIfeatures(
+        Posts.find({
+          user: {
+            $in: [req.user._id, ...req.user.following],
+          },
+          reply: { $size: 0 },
+        }),
+        req.query
+      ).paginating();
+      const posts = await features.query
         .populate("user", "-password")
         .sort("-createdAt");
 

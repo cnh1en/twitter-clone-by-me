@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Avatar from "../components/Avatar";
+import Header from "../components/header/Header";
+import InfiniteNotifies from "../components/infinite/InfiniteNotifies";
 import RemoveAllNotifiesModal from "../components/modal/RemoveAllNotifiesModal";
 import { deleteAllNotifies, getIsRead, readNotify } from "../redux/notifySlice";
 import { deleteDataAPI, patchDataAPI } from "../utils/fetchData";
@@ -70,6 +72,9 @@ const Notifications = () => {
 
   return (
     <div className="width-page divide-y-[1px] divide-[#2F3336] dark:divide-gray-200 overflow-scroll scrollbar">
+      <div className="hidden">
+        <Header />
+      </div>
       <div className="py-4 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20 dark:bg-white dark:opacity-80">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -88,8 +93,8 @@ const Notifications = () => {
 
       <div className="notifies-body">
         {!notify.notifies.length ? (
-          <div className="md:w-[400px] w-[300px] mx-auto my-32">
-            <h1 className="font-bold text-white text-[30px]">
+          <div className="md:w-[400px] w-[300px] mx-auto my-32 text-center">
+            <h1 className="font-bold text-white text-[30px] dark:text-black">
               Nothing to see here — yet
             </h1>
             <p className="text-[#71767b] text-[15px]">
@@ -97,37 +102,10 @@ const Notifications = () => {
             </p>
           </div>
         ) : (
-          notify.notifies.map((notify, index) => (
-            <Link
-              to={notify.url}
-              className={`space-y-2 py-4 px-6 flex justify-between items-center border-b-[1px] border-color dark:border-gray-200 ${
-                !notify.isRead && "bg-[#16181C] dark:bg-gray-100"
-              }`}
-              key={index}
-              onClick={() => handleReadNotify(notify)}
-            >
-              <div className="flex items-center gap-8">
-                <div className="action">{typeNotify(notify)}</div>
-                <div className="space-y-2">
-                  <Avatar src={notify.user.avatar} />
-                  <p className="text-white dark:text-black">
-                    <span className="font-bold">{notify.user.username} </span>
-                    {notify.text}
-                  </p>
-                </div>
-              </div>
-
-              <div className="image">
-                {notify.image && (
-                  <img
-                    src={notify.image}
-                    alt="img"
-                    className="w-[85px] h-[85px] object-cover rounded-xl"
-                  />
-                )}
-              </div>
-            </Link>
-          ))
+          <InfiniteNotifies
+            handleReadNotify={handleReadNotify}
+            typeNotify={typeNotify}
+          />
         )}
       </div>
 

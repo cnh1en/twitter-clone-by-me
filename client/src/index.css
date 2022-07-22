@@ -41,6 +41,7 @@
   .width-page {
     @apply fixed top-0 left-[70px] right-0 md:w-[calc(100%_-_370px)] xl:w-[calc(100%_-_802px)] xl:left-[402px] text-white h-screen z-20;
   }
+
   .input-message {
     @apply fixed bottom-0 left-[70px] right-0 md:w-[calc(100%_-_370px)] xl:w-[calc(100%_-_802px)] xl:left-[402px] text-white;
   }

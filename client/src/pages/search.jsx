@@ -6,6 +6,7 @@ import ButtonFollow from "../components/ButtonFollow";
 import SearchBar from "../components/SearchBar";
 import Chicken from "../images/chicken.png";
 import { useParams } from "react-router";
+import Header from "../components/header/Header";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -21,6 +22,9 @@ const Search = () => {
 
   return (
     <div className="width-page">
+      <div className="hidden">
+        <Header />
+      </div>
       <div className="py-2 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20 dark:bg-white">
         <SearchBar
           setUsers={setUsers}

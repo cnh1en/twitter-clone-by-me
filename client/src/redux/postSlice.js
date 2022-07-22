@@ -3,7 +3,7 @@ import { getDataAPI, postDataAPI } from "../utils/fetchData";
 
 const postSlice = createSlice({
   name: "post",
-  initialState: { posts: [], result: 0, page: 2 },
+  initialState: { posts: [], page: 1 },
   reducers: {
     likePost: (state, action) => {
       const { id, like, socket } = action.payload;
@@ -82,14 +82,13 @@ const postSlice = createSlice({
       state.posts = [action.payload, ...state.posts];
     },
     updatePage: (state, action) => {
-      if (!!action.payload) {
-        state.page = action.payload;
-      } else {
-        state.page += 1;
-      }
+      state.page += 1;
     },
     updateResult: (state, action) => {
       state.result += action.payload;
+    },
+    loadMorePosts: (state, action) => {
+      state.posts = [...state.posts, ...action.payload];
     },
   },
   extraReducers: (builder) => {
@@ -118,8 +117,8 @@ const postSlice = createSlice({
 
 export const getPosts = createAsyncThunk(
   "post/getPosts",
-  async ({ token, limit }) => {
-    const res = await getDataAPI(`/posts?limit=${limit}`, token);
+  async ({ token, limit, page }) => {
+    const res = await getDataAPI(`/posts?limit=${limit}&page=${page}`, token);
     return res.data;
   }
 );
@@ -151,5 +150,6 @@ export const {
   createComment,
   updatePage,
   updateResult,
+  loadMorePosts,
 } = postSlice.actions;
 export default postSlice.reducer;

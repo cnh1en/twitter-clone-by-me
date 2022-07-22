@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import Follow from "../../components/Follow";
+import Header from "../../components/header/Header";
 import UnfollowModal from "../../components/modal/UnfollowModal";
 import ProfileBody from "../../components/profile/ProfileBody";
 import ProfileHeader from "../../components/profile/ProfileHeader";
@@ -154,6 +155,9 @@ const Profile = () => {
       ref={containerRef}
       onScroll={handleScroll}
     >
+      <div className="hidden">
+        <Header />
+      </div>
       {!showButtonFollow && (
         <div className="profile relative z-20">
           <div className="flex items-center justify-between sticky top-0 z-30 h-[53px] bg-transparent px-3 py-4 text-[20px] dark:bg-white dark:bg-opacity-80">

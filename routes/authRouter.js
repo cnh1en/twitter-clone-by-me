@@ -6,8 +6,11 @@ const router = express.Router();
 
 router.route("/register").post(authCtrl.register);
 router.route("/activation").post(authCtrl.activateEmail);
+
 router.route("/forgot_password").post(authCtrl.forgotPassword);
-router.route("/reset_password").post(auth, authCtrl.resetPassword);
+router.route("/reset_password").post(authCtrl.activePassword);
+
+// router.route("/reset_password").post(auth, authCtrl.resetPassword);
 router.route("/login").post(authCtrl.login);
 router.route("/logout").post(authCtrl.logout);
 router.route("/refresh_token").get(authCtrl.generateAccessToken);

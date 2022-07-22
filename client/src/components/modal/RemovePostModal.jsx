@@ -2,7 +2,7 @@ import React from "react";
 
 const RemovePostModal = ({ setRemovePostModal, handleRemovePost }) => {
   return (
-    <div className="absolute w-full h-full top-0 left-0 z-30 bg-black  md:bg-transparent-config py-2 overflow-auto flex-center pointer-events-none">
+    <div className="absolute w-full h-full top-0 left-0 z-30 bg-black dark:bg-white dark:bg-transparent  md:bg-transparent-config py-2 overflow-auto flex-center pointer-events-none">
       <div className="w-[350px] p-8 bg-black border border-color rounded-2xl pointer-events-none dark:bg-white dark:border-none">
         <div className="top">
           <h1 className="text-[20px] mb-2 font-bold text-white dark:text-black">

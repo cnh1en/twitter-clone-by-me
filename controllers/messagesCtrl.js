@@ -2,6 +2,20 @@ import Users from "../models/userModel.js";
 import Conversations from "../models/conversationModel.js";
 import Messages from "../models/messagesModel.js";
 
+class APIfeatures {
+  constructor(query, queryString) {
+    this.query = query;
+    this.queryString = queryString;
+  }
+  paginating() {
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 3;
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
+    return this;
+  }
+}
+
 const messagesCtrl = {
   createMessage: async (req, res) => {
     try {
@@ -54,12 +68,17 @@ const messagesCtrl = {
 
   getMessages: async (req, res) => {
     try {
-      const messages = await Messages.find({
-        $or: [
-          { sender: req.user._id, recipient: req.params.id },
-          { sender: req.params.id, recipient: req.user._id },
-        ],
-      })
+      const features = await new APIfeatures(
+        Messages.find({
+          $or: [
+            { sender: req.user._id, recipient: req.params.id },
+            { sender: req.params.id, recipient: req.user._id },
+          ],
+        }),
+        req.query
+      ).paginating();
+
+      const messages = await features.query
         .sort("createdAt")
         .populate("sender recipient", "-password");
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import Header from "../components/header/Header";
 import Loading from "../components/Loading";
 import SearchBar from "../components/SearchBar";
 
@@ -39,6 +40,9 @@ const News = () => {
   return (
     <div className="width-page overflow-auto scrollbar bg-black z-30 dark:bg-white">
       <div className="py-4 px-3 text-[20px] font-bold bg-transparent sticky top-0 bg-black z-20 dark:bg-white dark:bg-opacity-80">
+        <div className="hidden">
+          <Header />
+        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span

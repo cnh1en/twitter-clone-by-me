@@ -45,7 +45,7 @@ const SidebarLink = ({
       )}
 
       {badge && to === "/notifications" && notify.isRead > 0 && (
-        <div className="absolute top-2 xl:left-2 left-1 w-5 h-5 rounded-full bg-[#1D9BF0] flex-center text-sm">
+        <div className="absolute top-2 xl:left-2 left-1 w-5 h-5 rounded-full bg-[#1D9BF0] flex-center text-sm dark:text-white">
           {notify.isRead}
         </div>
       )}
