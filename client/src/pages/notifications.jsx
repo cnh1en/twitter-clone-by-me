@@ -91,22 +91,11 @@ const Notifications = () => {
         </div>
       </div>
 
-      <div className="notifies-body">
-        {!notify.notifies.length ? (
-          <div className="md:w-[400px] w-[300px] mx-auto my-32 text-center">
-            <h1 className="font-bold text-white text-[30px] dark:text-black">
-              Nothing to see here — yet
-            </h1>
-            <p className="text-[#71767b] text-[15px]">
-              When someone mentions you, you’ll find it here.
-            </p>
-          </div>
-        ) : (
-          <InfiniteNotifies
-            handleReadNotify={handleReadNotify}
-            typeNotify={typeNotify}
-          />
-        )}
+      <div className="notifies-body relative">
+        <InfiniteNotifies
+          handleReadNotify={handleReadNotify}
+          typeNotify={typeNotify}
+        />
       </div>
 
       {notify.notifies.length > 0 && (

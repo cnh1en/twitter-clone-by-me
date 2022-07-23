@@ -53,7 +53,7 @@ const Bookmarks = () => {
         <div className="w-[320px] md:w-[400px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20">
           <img src={Bookmark} alt="chicken" className="object-cover" />
           <div>
-            <h1 className="font-bold text-white text-[30px]">
+            <h1 className="font-bold text-white text-[30px] dark:text-black">
               Save Tweets for later
             </h1>
             <p className="text-[#71767b] text-[15px]">

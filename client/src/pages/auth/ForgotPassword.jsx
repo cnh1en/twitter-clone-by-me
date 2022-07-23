@@ -2,16 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { postDataAPI } from "../../utils/fetchData";
 
-const SuccessfullAlert = () => {
-  return (
-    <div>
-      <h1>
-        Chúng tôi đã gửi cho bạn một thông báo ! Vui lòng kiểm tra email !!
-      </h1>
-    </div>
-  );
-};
-
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -49,7 +39,7 @@ const ForgotPassword = () => {
             <span className="w-5 h-5"></span>
           </div>
           <h1 className="font-bold text-2xl text-center mb-6">
-            Tìm tài khoản Twitter của bạn
+            Find Your Account
           </h1>
 
           <div className="relative">
@@ -68,7 +58,7 @@ const ForgotPassword = () => {
                 email && "text-[12px]"
               }`}
             >
-              Nhập email của bạn
+              Enter your email
             </label>
           </div>
 
@@ -107,7 +97,7 @@ const ForgotPassword = () => {
           onClick={handleSubmit}
           disabled={!email || success}
         >
-          Find
+          Search
         </button>
       </div>
     </div>

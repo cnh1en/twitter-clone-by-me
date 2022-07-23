@@ -62,12 +62,12 @@ const Message = () => {
       </div>
 
       {!conversations.length && flag ? (
-        <div className="md:w-[400px] w-[350px] mx-auto my-8 space-y-8">
-          <div className="space-y-1">
-            <h1 className="font-bold text-white text-[30px] bg:text-black">
+        <div className="md:w-[400px] w-[350px] mx-auto my-8 space-y-8 flex-center flex-col">
+          <div className="space-y-1 text-center">
+            <h1 className="font-bold text-white text-[30px] dark:text-black">
               Welcome to your inbox!
             </h1>
-            <p className="text-[#71767b] text-[14px] ">
+            <p className="text-[#71767b] text-[14px]">
               Drop a line, share Tweets and more with private conversations
               between you and others on Twitter.
             </p>

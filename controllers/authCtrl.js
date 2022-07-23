@@ -11,7 +11,7 @@ const client = new OAuth2(process.env.MAIL_SERVICE_CLIENT_ID);
 const authCtrl = {
   register: async (req, res) => {
     try {
-      const { fullname, username, email, password, gender } = req.body;
+      const { name, username, email, password, gender } = req.body;
       // VALIDATION
       const user_username = await Users.findOne({ username });
       if (user_username)
@@ -27,7 +27,7 @@ const authCtrl = {
       // const hashPassword = await bcrypt.hash(password, 12);
 
       const newUser = {
-        fullname,
+        fullname: name,
         username,
         email,
         password,
@@ -36,7 +36,7 @@ const authCtrl = {
 
       const activation_token = createActivationToken(newUser);
       const url = `${process.env.CLIENT_URL}/user/activate/${activation_token}`;
-      sendEmail(email, url, "Verify your email address");
+      sendEmail(email, url, "Verify your email address", "verify_email");
 
       res.json({
         msg: "Register success! Please activate your email to start.",
@@ -156,7 +156,7 @@ const authCtrl = {
       const url = `${process.env.CLIENT_URL}/user/reset/${access_token}`;
       console.log({ url });
       console.log(email);
-      sendEmail(email, url, "Reset your password");
+      sendEmail(email, url, "Reset your password", "reset_password");
       res.json({ msg: "Re-send the password, please check your email." });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
@@ -206,19 +206,20 @@ const authCtrl = {
       });
 
       const { email_verified, email, name, picture } = verify.payload;
-      const newEmail = process.env.GOOGLE_SECRET_PASSWORD + email;
+      const newEmail = process.env.GOOGLE_SECRET + email;
       const password = email + process.env.GOOGLE_SECRET;
-
       const passwordHash = await bcrypt.hash(password, 12);
 
       if (!email_verified)
         return res.status(400).json({ msg: "Email verification failed." });
 
-      const user = await Users.findOne({ email }).populate(
+      const user = await Users.findOne({ email: newEmail }).populate(
         "followers following",
         "-password"
       );
 
+      console.log({ newEmail, passwordHash });
+      console.log({ user });
       if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch)
@@ -239,7 +240,7 @@ const authCtrl = {
       } else {
         const newUser = new Users({
           fullname: name,
-          username: name,
+          username: name + "$",
           email: newEmail,
           password: passwordHash,
           avatar: picture,
@@ -290,6 +291,7 @@ const authCtrl = {
         "-password"
       );
 
+      console.log({ newEmail, passwordHash });
       if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch)
@@ -310,7 +312,7 @@ const authCtrl = {
         });
       } else {
         const newUser = new Users({
-          username: name,
+          username: name + "#",
           fullname: name,
           email: newEmail,
           password: passwordHash,
@@ -349,7 +351,7 @@ const createRefreshToken = (payload) => {
 };
 const createActivationToken = (payload) => {
   return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, {
-    expiresIn: "30s",
+    expiresIn: "5m",
   });
 };
 

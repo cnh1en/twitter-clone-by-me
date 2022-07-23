@@ -20,15 +20,14 @@ const oauth2Client = new OAuth2({
   OAUTH_PLAYGROUND,
 });
 
-const sendEmail = (to, url, txt) => {
+const sendEmail = (to, url, txt, type) => {
   oauth2Client.setCredentials({
     refresh_token: MAIL_SERVICE_REFRESH_TOKEN,
   });
-  // google.options({ auth: oauth2Client }); // Apply the settings globally
 
   const accessToken = new Promise((resolve, reject) => {
     oauth2Client.getAccessToken((err, token) => {
-      if (err) console.log(err); // Handling the errors
+      if (err) console.log(err);
       else resolve(token);
     });
   });
@@ -47,15 +46,22 @@ const sendEmail = (to, url, txt) => {
   const mailOptions = {
     from: SENDER_EMAIL_ADDRESS,
     to: to,
-    subject: "Hien",
+    subject: `${txt} || Twitter`,
     html: `
 				 <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
-				 <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the DevAT channel.</h2>
-				 <p>Congratulations! You're almost set to start using DEVAT✮SHOP.
-					  Just click the button below to validate your email address.
+				 <h2 style="text-align: center; text-transform: uppercase;color: teal;">
+				 		${type === "reset_password" ? "Reset password" : "Welcome to Twitter"}
+				 </h2>
+				 <p>
+				 		${
+              type === "verify_email"
+                ? "Congratulations! You're almost set to start using Twitter."
+                : ""
+            }
+					  Just click the button below <span style="text-transform: lowercase">${txt}</span>.
 				 </p>
 				 
-				 <a href=${url} style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">${txt}</a>
+				 <a href=${url} style="background: #1d9bf0; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">${txt}</a>
 			
 				 <p>If the button doesn't work for any reason, you can also click on the link below:</p>
 			
@@ -64,12 +70,9 @@ const sendEmail = (to, url, txt) => {
 			`,
   };
 
-  smtpTransport.sendMail(mailOptions, (err, infor) => {
+  smtpTransport.sendMail(mailOptions, (err, info) => {
     if (err) throw err;
-    else {
-      console.log("PING");
-      return info;
-    }
+    return info;
   });
 };
 

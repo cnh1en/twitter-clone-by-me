@@ -15,6 +15,7 @@ import { loading } from "./redux/loadSlice";
 import { getSocket } from "./redux/socketSlice";
 import PageRender from "./routes/PageRender";
 import PrivateRoute from "./routes/PrivateRoute";
+import VerifyPage from "./pages/auth/VerifyPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/user/activate/:token" element={<ActiveUser />} />
           <Route path="/user/forgot_password" element={<ForgotPassword />} />
           <Route path="/user/reset/:token" element={<ResetPassword />} />
+          <Route path="/verify" element={<VerifyPage />} />
 
           <Route
             path="/"

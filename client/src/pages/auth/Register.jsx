@@ -5,9 +5,11 @@ import * as yup from "yup";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import VerifyPage from "./VerifyPage";
 
 const Register = () => {
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -34,13 +36,11 @@ const Register = () => {
           /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
           "Please enter a valid email address"
         ),
-      password: yup
-        .string()
-        .required("Required!")
-        .matches(
-          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/,
-          "Password must be 7-19 characters"
-        ),
+      password: yup.string().required("Required!"),
+      // .matches(
+      //   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/,
+      //   "Password must be 7-19 characters"
+      // ),
       confirmedPassword: yup
         .string()
         .required("Required!")
@@ -52,13 +52,20 @@ const Register = () => {
     onSubmit: async (values) => {
       const { confirmedPassword, ...newUser } = values;
       try {
+        setSuccess(false);
         const res = await axios.post("/api/register", newUser);
         console.log(res.data);
+        setSuccess(true);
       } catch (error) {
         error.response.data.msg && setError(error.response.data.msg);
       }
     },
   });
+
+  if (success) {
+    return <VerifyPage name={formik.values.name} />;
+  }
+
   return (
     <div>
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:w-[900px] py-[75px] flex shadow-login items-center w-[calc(100%_-_30px)] md:flex-row flex-col h-[calc(100vh-60px)] overflow-auto scrollbar-thin">

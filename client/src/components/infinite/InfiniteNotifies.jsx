@@ -42,38 +42,39 @@ function InfiniteNotifies({ handleReadNotify, typeNotify }) {
 
   return (
     <div ref={infiniteRef}>
-      {notify.notifies.map((notify, index) => (
-        <Link
-          to={notify.url}
-          className={`space-y-2 py-4 px-6 flex justify-between items-center border-b border-color dark:border-gray-200 ${
-            !notify.isRead && "bg-[#16181C] dark:bg-gray-100"
-          }`}
-          key={notify._id}
-          onClick={() => handleReadNotify(notify)}
-        >
-          <div className="flex items-center gap-8">
-            <div className="action">{typeNotify(notify)}</div>
-            <div className="space-y-2">
-              <Avatar src={notify.user.avatar} />
-              <p className="text-white dark:text-black">
-                <span className="font-bold">{notify.user.username} </span>
-                {notify.text}
-              </p>
+      {notify.notifies.length > 0 ? (
+        notify.notifies.map((notify, index) => (
+          <Link
+            to={notify.url}
+            className={`space-y-2 py-4 px-6 flex justify-between items-center border-b border-color dark:border-gray-200 ${
+              !notify.isRead && "bg-[#16181C] dark:bg-gray-100"
+            }`}
+            key={notify._id}
+            onClick={() => handleReadNotify(notify)}
+          >
+            <div className="flex items-center gap-8">
+              <div className="action">{typeNotify(notify)}</div>
+              <div className="space-y-2">
+                <Avatar src={notify.user.avatar} />
+                <p className="text-white dark:text-black">
+                  <span className="font-bold">{notify.user.username} </span>
+                  {notify.text}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="image">
-            {notify.image && (
-              <img
-                src={notify.image}
-                alt="img"
-                className="w-[85px] h-[85px] object-cover rounded-xl"
-              />
-            )}
-          </div>
-        </Link>
-      ))}
-      {loading && (
+            <div className="image">
+              {notify.image && (
+                <img
+                  src={notify.image}
+                  alt="img"
+                  className="w-[85px] h-[85px] object-cover rounded-xl"
+                />
+              )}
+            </div>
+          </Link>
+        ))
+      ) : loading ? (
         <div className="flex flex-col justify-center items-center mt-4">
           <svg
             role="status"
@@ -91,6 +92,15 @@ function InfiniteNotifies({ handleReadNotify, typeNotify }) {
               fill="currentFill"
             ></path>
           </svg>
+        </div>
+      ) : (
+        <div className="md:w-[400px] w-[300px] mx-auto my-32 text-center">
+          <h1 className="font-bold text-white text-[30px] dark:text-black">
+            Nothing to see here — yet
+          </h1>
+          <p className="text-[#71767b] text-[15px]">
+            When someone mentions you, you’ll find it here.
+          </p>
         </div>
       )}
     </div>

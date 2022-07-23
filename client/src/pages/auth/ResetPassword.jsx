@@ -42,7 +42,7 @@ const ResetPassword = () => {
 
   return (
     <div className="grid place-items-center h-screen">
-      <div className="w-[500px] h-[90%] shadow-xl p-6 flex flex-col ">
+      <div className="w-[500px] h-[90%] shadow-xl p-6 flex flex-col">
         <div>
           <div className="flex items-center justify-between mb-6">
             <span className="w-8 h-8 flex-center hover:hoverAnimation2">
@@ -55,7 +55,7 @@ const ResetPassword = () => {
             <span className="w-5 h-5"></span>
           </div>
           <h1 className="font-bold text-2xl text-center mb-6">
-            Xác nhận mật khẩu mới
+            Enter new password
           </h1>
 
           <div className="relative mb-4">
@@ -73,7 +73,7 @@ const ResetPassword = () => {
                 password && "text-[12px]"
               }`}
             >
-              Nhập mật khẩu mới
+              Enter new password
             </label>
           </div>
 
@@ -96,7 +96,7 @@ const ResetPassword = () => {
                 confirmPassword && "text-[12px]"
               }`}
             >
-              Xác nhận mật khẩu mới
+              Confirm password
             </label>
           </div>
           {!!error && <span className="text-red-600">{error}</span>}
