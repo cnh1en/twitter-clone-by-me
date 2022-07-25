@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDarkMode } from "../../hooks/useDarkMode";
 
 const Header = () => {
-  const [modeTheme, setModeTheme] = useState(false);
   const [isDark, setIsDark] = useDarkMode();
 
   return (
@@ -11,12 +10,11 @@ const Header = () => {
       <div
         className="dark-mode cursor-pointer"
         onClick={() => {
-          setModeTheme(!modeTheme);
           setIsDark(!isDark);
         }}
       >
         <div className="dark:text-black">
-          {!modeTheme ? (
+          {!isDark ? (
             <i className="ri-sun-line"></i>
           ) : (
             <i className="ri-moon-fill"></i>

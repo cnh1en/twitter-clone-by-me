@@ -13,7 +13,7 @@ const PhotosSlideModal = ({ images, setOpenPhotosSlide, indexImage }) => {
       <img
         src={image.url}
         alt="image_instagram"
-        className="object-cover w-full h-full"
+        className="object-contain w-full h-full"
       />
     </div>
   ));

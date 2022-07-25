@@ -86,7 +86,8 @@ const ResetPassword = () => {
               maxLength="100"
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
-                if (e.target.value !== password) setError("Mật khẩu chưa khớp");
+                if (e.target.value !== password)
+                  setError("Password doesn't match.");
                 else setError("");
               }}
             />

@@ -312,7 +312,14 @@ const PostOptionModal = ({ auth, post, setShowOptionPostModal }) => {
               </div>
             )}
 
-            <div className="follow flex gap-4 items-center py-2">
+            <div
+              className="follow flex gap-4 items-center py-2"
+              onClick={() => {
+                toast(`Reported ${post.user.username} !!`);
+                setShowOptionPostModal(false);
+                dispatch(openModal(false));
+              }}
+            >
               <FlagIcon className="h-5 text-[#71767B]" />
               <span className="font-[400] text-[15px] dark:text-black text-white">
                 Report @{post.user.username}
@@ -331,12 +338,12 @@ const PostOptionModal = ({ auth, post, setShowOptionPostModal }) => {
               <TrashIcon className="h-5" />
               <span className="font-[400] text-[15px]">Remove</span>
             </div>
-            <div className="follow flex gap-4 items-center py-2">
+            {/* <div className="follow flex gap-4 items-center py-2">
               <PencilIcon className="h-5 text-[#71767B]" />
               <span className="font-[400] text-[15px] dark:text-black text-white">
                 Edit
               </span>
-            </div>
+            </div> */}
 
             {!checkBookmark ? (
               <div
