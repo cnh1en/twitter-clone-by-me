@@ -68,17 +68,12 @@ const messagesCtrl = {
 
   getMessages: async (req, res) => {
     try {
-      const features = await new APIfeatures(
-        Messages.find({
-          $or: [
-            { sender: req.user._id, recipient: req.params.id },
-            { sender: req.params.id, recipient: req.user._id },
-          ],
-        }),
-        req.query
-      ).paginating();
-
-      const messages = await features.query
+      const messages = await Messages.find({
+        $or: [
+          { sender: req.user._id, recipient: req.params.id },
+          { sender: req.params.id, recipient: req.user._id },
+        ],
+      })
         .sort("createdAt")
         .populate("sender recipient", "-password");
 
